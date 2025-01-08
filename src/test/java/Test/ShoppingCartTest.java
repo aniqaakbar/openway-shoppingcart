@@ -20,8 +20,8 @@ public class ShoppingCartTest {
     WebDriver driver;
     NavBarPage navBarPage;
     SearchResultsPage searchResultsPage;
-//    ProductPage productPage;
-//    CartPage cartPage;
+    ProductPage productPage;
+    CartPage cartPage;
     LoginPage loginPage;
     WebDriverWait wait;
 
@@ -29,12 +29,12 @@ public class ShoppingCartTest {
     public void setup(){
         System.setProperty("webDriver.chrome.driver", System.getProperty("user.dir") + "/src/test/resources/chromeDriver.exe");
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         driver.get("https://www.periplus.com");
         navBarPage = new NavBarPage(driver);
         searchResultsPage = new SearchResultsPage(driver);
-//        productPage = new ProductPage(driver);
-//        cartPage = new CartPage(driver);
+        productPage = new ProductPage(driver);
+        cartPage = new CartPage(driver);
         loginPage = new LoginPage(driver);
     }
 
@@ -107,10 +107,67 @@ public class ShoppingCartTest {
     @Test(priority = 13)
     public void T13_TestClickBook(){
         searchResultsPage.clickSpecificBook();
-//        String expectedURL = "https://www.periplus.com/p/9781847941831/atomic-habits?filter_name=atomic%20habits";
-//        Assert.assertTrue(searchResultsPage.isSearchResultsDisplayed(expectedURL),
-//                "The search results page URL does not contain the expected query.");
+        String partialURL = "9781847941831";
+        Assert.assertTrue(productPage.isBookPageDisplayed(partialURL),
+                "The search results page URL does not contain the expected query.");
     }
+
+
+    @Test(priority = 14)
+    public void T14_TestPlusQuantityButtonDisplayed(){
+        Assert.assertTrue(productPage.isPlusButtonDisplayed());
+    }
+
+    @Test(priority = 15)
+    public void T15_TestPlusQuantityButtonClickable(){
+        Assert.assertTrue(productPage.isPlusButtonClickable());
+    }
+
+    @Test(priority = 16)
+    public void T16_TestMinusQuantityButtonDisplayed(){
+        Assert.assertTrue(productPage.isMinusButtonDisplayed());
+    }
+
+    @Test(priority = 17)
+    public void T17_TestMinusQuantityButtonClickable(){
+        Assert.assertTrue(productPage.isMinusButtonClickable());
+    }
+
+    @Test(priority = 18)
+    public void T18_TestQuantityDisplayed(){
+        Assert.assertTrue(productPage.isQuantityDisplayed());
+    }
+
+    @Test(priority = 19)
+    public void T19_TestAddToCartButtonDisplayed(){
+        Assert.assertTrue(productPage.isAddToCartButtonDisplayed());
+    }
+
+    @Test(priority = 20)
+    public void T20_TestAddToCartButtonClickable(){
+        Assert.assertTrue(productPage.isAddToCartButtonClickable());
+    }
+
+    @Test(priority = 21)
+    public void T21_TestAddToCart(){
+        productPage.addToCart();
+        Assert.assertTrue(productPage.isNotificationModalDisplayed());
+        productPage.closeNotificationModal();
+    }
+
+    @Test(priority = 22)
+    public void T22_TestGoToCartPage(){
+        navBarPage.clickCartButton();
+        String partialURL = "cart";
+        Assert.assertTrue(cartPage.isCartPageDisplayed(partialURL),
+                "The search results page URL does not contain the expected query.");
+    }
+
+
+
+
+
+
 
     @AfterTest
     public void closeDriver(){

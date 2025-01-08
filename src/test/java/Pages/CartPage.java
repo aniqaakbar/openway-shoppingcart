@@ -14,13 +14,14 @@ public class CartPage {
     WebDriverWait wait;
     SearchResultsPage searchResultsPage;
 
-    @FindBy(className = "btn btn-cart-remove")
+
+    @FindBy(xpath = "//a[contains(text(),'Remove')]")
     WebElement removeButton;
 
-    @FindBy(className = "btn btn-cart-save")
+    @FindBy(xpath = "//a[contains(text(),'Save for later')]")
     WebElement saveButton;
 
-    @FindBy(linkText = "http://www.periplus.com/_index_/index")
+    @FindBy(xpath = "//a[contains(text(),'Continue shopping')]")
     WebElement continueShoppingButton;
 
     @FindBy(id = "sub-total")
@@ -34,6 +35,11 @@ public class CartPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
+    }
+
+    public boolean isCartPageDisplayed(String partialURL) {
+        String currentURL = driver.getCurrentUrl();
+        return currentURL.contains(partialURL);
     }
 
     public boolean isBookAddedToCart() {

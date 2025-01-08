@@ -1,5 +1,6 @@
 package Pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,16 +15,18 @@ public class ProductPage {
     WebDriverWait wait;
     NavBarPage navBarPage;
 
+    public static String PRELOADER = "preloader";
+
     @FindBy(xpath = "//button[contains(text(),'Add to Cart')]")
     WebElement addToCartButton;  // "Add to Cart" button
 
     @FindBy(id = "qty_54384253")
     WebElement specificBookQuantity;
 
-    @FindBy(name = "plus")
+    @FindBy(className = "ti-plus")
     WebElement plusQuantityButton;
 
-    @FindBy(name = "minus")
+    @FindBy(className = "ti-minus")
     WebElement minusQuantityButton;
 
     @FindBy(id = "Nptification-Modal")
@@ -40,11 +43,12 @@ public class ProductPage {
 
     public boolean isBookPageDisplayed(String expectedURL) {
         String currentURL = driver.getCurrentUrl();
+//        System.out.println("Current URL: " + currentURL);
         return currentURL.contains(expectedURL);
     }
 
     //Actions
-    public boolean isAddToCartButtonPresent() {
+    public boolean isAddToCartButtonDisplayed() {
         return addToCartButton.isDisplayed();
     }
 
@@ -57,8 +61,12 @@ public class ProductPage {
         }
     }
 
-    public boolean isQuantityVisible() {
+    public boolean isQuantityDisplayed() {
         return specificBookQuantity.isDisplayed();
+    }
+
+    public boolean isPlusButtonDisplayed() {
+        return plusQuantityButton.isDisplayed();
     }
 
     public boolean isPlusButtonClickable() {
@@ -69,6 +77,11 @@ public class ProductPage {
             return false;
         }
     }
+
+    public boolean isMinusButtonDisplayed() {
+        return minusQuantityButton.isDisplayed();
+    }
+
     public boolean isMinusButtonClickable() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(minusQuantityButton));
@@ -88,6 +101,7 @@ public class ProductPage {
     }
 
     public void addToCart() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
     }
 
@@ -95,9 +109,6 @@ public class ProductPage {
         wait.until(ExpectedConditions.elementToBeClickable(notificationModalButton)).click();
     }
 
-    public void goToCartPage() {
-        navBarPage.clickCartButton();  // Click the cart icon in the navbar
-    }
 
 
 

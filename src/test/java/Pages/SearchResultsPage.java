@@ -1,5 +1,6 @@
 package Pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,8 +15,9 @@ public class SearchResultsPage {
     WebDriver driver;
     WebDriverWait wait;
 
+    public static String PRELOADER = "preloader";
 
-    @FindBy(xpath = "(//a[contains(text(), 'Atomic Habits')])[1]")
+    @FindBy(xpath = "//a[contains(text(), 'Atomic Habits')]")
     WebElement specificBook;
 
     // Constructor
@@ -32,6 +34,7 @@ public class SearchResultsPage {
 
     // Method to click on a specific book
     public void clickSpecificBook() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
         WebElement bookElement = wait.until(ExpectedConditions.elementToBeClickable(specificBook));
         bookElement.click();
     }
