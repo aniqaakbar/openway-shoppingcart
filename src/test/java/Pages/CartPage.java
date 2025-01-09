@@ -14,10 +14,10 @@ public class CartPage {
     WebDriverWait wait;
     SearchResultsPage searchResultsPage;
 
-    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]/div[1]/div[2]/button[1]")
+    @FindBy(xpath = "//button[@name= 'plus[54384253]']")
     WebElement plusButton;
 
-    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]/div[1]/div[1]/button[1]")
+    @FindBy(xpath = "//button[@name= 'minus[54384253]']")
     WebElement minusButton;
 
     @FindBy(xpath = "//a[contains(text(),'Remove')]")
@@ -29,17 +29,18 @@ public class CartPage {
     @FindBy(xpath = "//a[contains(text(),'Continue shopping')]")
     WebElement continueShoppingButton;
 
-    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/ul[1]/li[1]/span[1]")
+    @FindBy(xpath = "//span[contains(text(), 'Rp ')]")
     WebElement cartPrice;
 
     @FindBy(xpath = "//a[contains(text(),'Checkout')]")
     WebElement checkoutButton;
 
-    @FindBy(xpath = "//body/div[3]/div[1]/div[1]/div[2]")
+    @FindBy(xpath = "//div[contains(text(),'Your shopping cart is empty') and @class= 'content']")
     WebElement emptyCartText;
 
     @FindBy(xpath = "//input[@id='qty_54384253']")
     public WebElement bookQuantity;
+
     // Constructor
     public CartPage(WebDriver driver) {
         this.driver = driver;
@@ -48,7 +49,7 @@ public class CartPage {
         PageFactory.initElements(driver, this);
     }
 
-    public boolean isCartEmpty(){
+    public boolean isCartEmpty() {
         return wait.until(ExpectedConditions.visibilityOf(emptyCartText)).isDisplayed();
     }
 
@@ -65,7 +66,7 @@ public class CartPage {
         }
     }
 
-    public void clickPlusButton(){
+    public void clickPlusButton() {
         wait.until(ExpectedConditions.elementToBeClickable(plusButton)).click();
     }
 
@@ -82,7 +83,7 @@ public class CartPage {
         }
     }
 
-    public void clickMinusButton(){
+    public void clickMinusButton() {
         wait.until(ExpectedConditions.elementToBeClickable(minusButton)).click();
     }
 
@@ -151,11 +152,4 @@ public class CartPage {
     public void clickCheckoutButton() {
         wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
     }
-
-
-
-
-
-
-
 }

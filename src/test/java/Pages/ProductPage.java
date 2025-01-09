@@ -20,19 +20,19 @@ public class ProductPage {
     @FindBy(xpath = "//button[contains(text(),'Add to Cart')]")
     WebElement addToCartButton;  // "Add to Cart" button
 
-    @FindBy(id = "qty_54384253")
+    @FindBy(xpath = "//input[@id= 'qty_54384253']")
     WebElement specificBookQuantity;
 
-    @FindBy(className = "ti-plus")
+    @FindBy(xpath = "//button[@data-field= 'qty_54384253' and @data-type='plus']")
     WebElement plusQuantityButton;
 
-    @FindBy(className = "ti-minus")
+    @FindBy(xpath = "//button[@data-field= 'qty_54384253' and @data-type='minus']")
     WebElement minusQuantityButton;
 
-    @FindBy(xpath = "//body/div[@id='notification-modal-header']/div[@id='Notification-Modal']/div[1]/div[1]/div[1]")
+    @FindBy(xpath = "//div[contains(text(),'Success add to cart')]")
     WebElement notificationModal;
 
-    @FindBy(id = "//body/div[@id='notification-modal-header']/div[@id='Notification-Modal']/div[1]/div[1]/div[1]/div[1]/button[1]")
+    @FindBy(xpath = "//button[@aria-label= 'close']")
     WebElement notificationModalButton;
 
     public ProductPage(WebDriver driver) {

@@ -19,7 +19,7 @@ public class NavBarPage {
     @FindBy(xpath = "//span[@id='nav-signin-text']")
     WebElement signInPageButton;
 
-    @FindBy(id = "filter_name")  // Search bar
+    @FindBy(xpath = "//input[@id='filter_name' and @name= 'filter_name']")  // Search bar
             WebElement searchBar;
 
     @FindBy(xpath = "//button[@type='submit']")  // Search button

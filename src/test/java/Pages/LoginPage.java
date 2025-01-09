@@ -24,16 +24,16 @@ public class LoginPage {
     @FindBy(xpath = "//span[contains(text(),'Sign In to Your Account')]")
     WebElement pageTitle;
 
-    @FindBy(xpath = "//tbody/tr[2]/td[1]/input[1]")
+    @FindBy(xpath = "//input[@name='email']")
     WebElement emailField;
 
-    @FindBy(xpath = "//input[@id='ps']")
+    @FindBy(xpath = "//input[@name='password']")
     WebElement passwordField;
 
-    @FindBy(id = "button-login")
+    @FindBy(xpath = "//input[@id='button-login']")
     WebElement loginButton;
 
-    @FindBy(xpath = "//li[@class='active']/a[text()='Account Details']")
+    @FindBy(xpath = "//a[contains(text(),'Account Details')]")
     WebElement accountDetailsPage;
 
     /*Constructor*/
@@ -71,7 +71,7 @@ public class LoginPage {
     //Validations
 
     public boolean isLoginPageDisplayed(){
-        return wait.until(ExpectedConditions.visibilityOf(loginPageContent)).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOf(pageTitle)).isDisplayed();
     }
 
     public boolean isEmailFieldDisplayed() {
