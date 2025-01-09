@@ -163,11 +163,87 @@ public class ShoppingCartTest {
                 "The search results page URL does not contain the expected query.");
     }
 
+    @Test(priority = 23)
+    public void T23_TestBookDisplayed(){
+        Assert.assertTrue(cartPage.isBookAddedToCart());
+    }
 
+    @Test(priority = 24)
+    public void T24_TestPlusButtonDisplayed(){
+        Assert.assertTrue(cartPage.isPlusButtonDisplayed());
+    }
 
+    @Test(priority = 25)
+    public void T25_TestPlusButtonClickable(){
+        Assert.assertTrue(cartPage.isPlusButtonClickable());
+    }
 
+    @Test(priority = 26)
+    public void T26_TestMinusButtonDisplayed(){
+        Assert.assertTrue(cartPage.isMinusButtonDisplayed());
+    }
 
+    @Test(priority = 27)
+    public void T27_TestMinusButtonClickable(){
+        Assert.assertTrue(cartPage.isMinusButtonClickable());
+    }
 
+    @Test(priority = 28)
+    public void T28_TestRemoveButtonDisplayed(){
+        Assert.assertTrue(cartPage.isRemoveButtonDisplayed());
+    }
+
+    @Test(priority = 29)
+    public void T29_TestRemoveButtonClickable(){
+        Assert.assertTrue(cartPage.isRemoveButtonClickable());
+    }
+
+    @Test(priority = 30)
+    public void T30_TestSaveButtonDisplayed(){
+        Assert.assertTrue(cartPage.isSaveButtonDisplayed());
+    }
+
+    @Test(priority = 31)
+    public void T31_TestSaveButtonClickable(){
+        Assert.assertTrue(cartPage.isSaveButtonClickable());
+    }
+
+    @Test(priority = 32)
+    public void T32_TestCheckoutButtonDisplayed(){
+        Assert.assertTrue(cartPage.isCheckoutButtonDisplayed());
+    }
+
+    @Test(priority = 33)
+    public void T33_TestCheckoutButtonClickable(){
+        Assert.assertTrue(cartPage.isCheckoutButtonClickable());
+    }
+
+    @Test(priority = 34)
+    public void T34_TestCartPriceDisplayed(){
+        Assert.assertTrue(cartPage.isCartPriceDisplayed());
+    }
+
+    @Test(priority = 35)
+    public void T35_TestPlusBookQuantity(){
+        int expectedQty = 2;
+        cartPage.clickPlusButton();
+        int actualQty = cartPage.getBookQuantity();
+        Assert.assertEquals(actualQty, expectedQty);
+    }
+
+    @Test(priority = 36)
+    public void T36_TestMinusBookQuantity() {
+        int expectedQty = 1;
+        cartPage.clickMinusButton();
+        int actualQty = cartPage.getBookQuantity();
+        Assert.assertEquals(actualQty, expectedQty, "The book quantity after decrement is incorrect.");
+    }
+
+    @Test(priority = 37)
+    public void T37_TestRemoveButton(){
+        cartPage.clickRemoveButton();
+        Assert.assertTrue(cartPage.isCartEmpty());
+    }
 
     @AfterTest
     public void closeDriver(){

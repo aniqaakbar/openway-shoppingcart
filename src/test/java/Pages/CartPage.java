@@ -14,6 +14,11 @@ public class CartPage {
     WebDriverWait wait;
     SearchResultsPage searchResultsPage;
 
+    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]/div[1]/div[2]/button[1]")
+    WebElement plusButton;
+
+    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]/div[1]/div[1]/button[1]")
+    WebElement minusButton;
 
     @FindBy(xpath = "//a[contains(text(),'Remove')]")
     WebElement removeButton;
@@ -24,17 +29,66 @@ public class CartPage {
     @FindBy(xpath = "//a[contains(text(),'Continue shopping')]")
     WebElement continueShoppingButton;
 
-    @FindBy(id = "sub-total")
+    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/ul[1]/li[1]/span[1]")
     WebElement cartPrice;
 
-    @FindBy(xpath = "//body/div[3]/div[1]/form[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a[1]")
+    @FindBy(xpath = "//a[contains(text(),'Checkout')]")
     WebElement checkoutButton;
 
+    @FindBy(xpath = "//body/div[3]/div[1]/div[1]/div[2]")
+    WebElement emptyCartText;
+
+    @FindBy(xpath = "//input[@id='qty_54384253']")
+    public WebElement bookQuantity;
     // Constructor
     public CartPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        searchResultsPage = new SearchResultsPage(driver);
         PageFactory.initElements(driver, this);
+    }
+
+    public boolean isCartEmpty(){
+        return wait.until(ExpectedConditions.visibilityOf(emptyCartText)).isDisplayed();
+    }
+
+    public boolean isPlusButtonDisplayed() {
+        return plusButton.isDisplayed();
+    }
+
+    public boolean isPlusButtonClickable() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(plusButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clickPlusButton(){
+        wait.until(ExpectedConditions.elementToBeClickable(plusButton)).click();
+    }
+
+    public boolean isMinusButtonDisplayed() {
+        return minusButton.isDisplayed();
+    }
+
+    public boolean isMinusButtonClickable() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(minusButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clickMinusButton(){
+        wait.until(ExpectedConditions.elementToBeClickable(minusButton)).click();
+    }
+
+    public int getBookQuantity() {
+        String quantityText = bookQuantity.getAttribute("value");
+        return Integer.parseInt(quantityText);
     }
 
     public boolean isCartPageDisplayed(String partialURL) {
@@ -46,13 +100,16 @@ public class CartPage {
         return wait.until(ExpectedConditions.visibilityOf(searchResultsPage.specificBook)).isDisplayed();
     }
 
-    public boolean isBookPriceDisplayed() {
+    public boolean isCartPriceDisplayed() {
         return cartPrice.isDisplayed();
     }
 
-    public boolean isRemoveButtonVisibleAndClickable() {
+    public boolean isRemoveButtonDisplayed() {
+        return removeButton.isDisplayed();
+    }
+
+    public boolean isRemoveButtonClickable() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(removeButton));
             wait.until(ExpectedConditions.elementToBeClickable(removeButton));
             return true;
         } catch (Exception e) {
@@ -60,11 +117,25 @@ public class CartPage {
         }
     }
 
+
     public void clickRemoveButton() {
         wait.until(ExpectedConditions.elementToBeClickable(removeButton)).click();
     }
 
-    public boolean isCheckoutButtonVisible() {
+    public boolean isSaveButtonDisplayed() {
+        return saveButton.isDisplayed();
+    }
+
+    public boolean isSaveButtonClickable() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(saveButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isCheckoutButtonDisplayed() {
         return checkoutButton.isDisplayed();
     }
 

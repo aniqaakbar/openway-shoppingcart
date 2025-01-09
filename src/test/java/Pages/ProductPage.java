@@ -29,10 +29,10 @@ public class ProductPage {
     @FindBy(className = "ti-minus")
     WebElement minusQuantityButton;
 
-    @FindBy(id = "Nptification-Modal")
+    @FindBy(xpath = "//body/div[@id='notification-modal-header']/div[@id='Notification-Modal']/div[1]/div[1]/div[1]")
     WebElement notificationModal;
 
-    @FindBy(id = "notification-modal-header")
+    @FindBy(id = "//body/div[@id='notification-modal-header']/div[@id='Notification-Modal']/div[1]/div[1]/div[1]/div[1]/button[1]")
     WebElement notificationModalButton;
 
     public ProductPage(WebDriver driver) {
@@ -43,7 +43,6 @@ public class ProductPage {
 
     public boolean isBookPageDisplayed(String expectedURL) {
         String currentURL = driver.getCurrentUrl();
-//        System.out.println("Current URL: " + currentURL);
         return currentURL.contains(expectedURL);
     }
 
@@ -92,12 +91,7 @@ public class ProductPage {
     }
 
     public boolean isNotificationModalDisplayed() {
-        try {
-            wait.until(ExpectedConditions.visibilityOf(notificationModal));
-            return notificationModal.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        return wait.until(ExpectedConditions.visibilityOf(notificationModal)).isDisplayed();
     }
 
     public void addToCart() {
