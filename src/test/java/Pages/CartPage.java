@@ -1,5 +1,6 @@
 package Pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,10 +30,10 @@ public class CartPage {
     @FindBy(xpath = "//a[contains(text(),'Continue shopping')]")
     WebElement continueShoppingButton;
 
-    @FindBy(xpath = "//span[contains(text(), 'Rp ')]")
+    @FindBy(xpath = "//span[@id = 'sub_total' and contains(text(), 'Rp ')]")
     WebElement cartPrice;
 
-    @FindBy(xpath = "//a[contains(text(),'Checkout')]")
+    @FindBy(xpath = "//div[@class='button5']/a[text()='Checkout']")
     WebElement checkoutButton;
 
     @FindBy(xpath = "//div[contains(text(),'Your shopping cart is empty') and @class= 'content']")
@@ -40,6 +41,10 @@ public class CartPage {
 
     @FindBy(xpath = "//input[@id='qty_54384253']")
     public WebElement bookQuantity;
+
+    @FindBy(xpath = "//div[@class = 'success' and contains(text(), 'Success: You have modified your shopping cart')]")
+    WebElement successMessage;
+
 
     // Constructor
     public CartPage(WebDriver driver) {
@@ -51,6 +56,10 @@ public class CartPage {
 
     public boolean isCartEmpty() {
         return wait.until(ExpectedConditions.visibilityOf(emptyCartText)).isDisplayed();
+    }
+
+    public boolean isSuccessMessageDisplayed(){
+        return wait.until(ExpectedConditions.visibilityOf(successMessage)).isDisplayed();
     }
 
     public boolean isPlusButtonDisplayed() {
@@ -97,9 +106,16 @@ public class CartPage {
         return currentURL.contains(partialURL);
     }
 
-    public boolean isBookAddedToCart() {
-        return wait.until(ExpectedConditions.visibilityOf(searchResultsPage.specificBook)).isDisplayed();
+    public boolean isBookAddedToCart(String bookName) {
+        String xpath = "//a[contains(text(), '" + bookName + "')]";  // Dynamic XPath for book name
+        try {
+            WebElement bookElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+            return bookElement.isDisplayed();  // Return true if displayed
+        } catch (Exception e) {
+            return false;  // Return false if not found
+        }
     }
+
 
     public boolean isCartPriceDisplayed() {
         return cartPrice.isDisplayed();

@@ -1,8 +1,10 @@
 package Test;
 
 import Pages.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
@@ -14,7 +16,8 @@ import java.time.Duration;
 
 import static Pages.LoginPage.EMAIL;
 import static Pages.LoginPage.PASSWORD;
-import static Pages.NavBarPage.bookName;
+import static Pages.ProductPage.PRELOADER;
+//import static Pages.NavBarPage.bookName;
 
 public class ShoppingCartTest {
     WebDriver driver;
@@ -97,19 +100,32 @@ public class ShoppingCartTest {
 
     @Test(priority = 12)
     public void T12_TestSearchBook() {
-        navBarPage.searchBook(bookName);
-        String partialURL = "filter_name=Atomic+Habits";
+        String bookName = "Atomic Habits";  // You can change this value for different tests
+        navBarPage.searchBook(bookName);  // Pass dynamic book name in the search method
 
+        // Dynamic URL verification
+        String partialURL = "filter_name=" + bookName.replace(" ", "+");
         Assert.assertTrue(searchResultsPage.isSearchResultsDisplayed(partialURL),
                 "The search results page URL does not contain the expected query.");
+
+        // Check if the specific book is displayed
+        Assert.assertTrue(searchResultsPage.isBookDisplayed(bookName),
+                "The specific book '" + bookName + "' is not displayed in the search results.");
     }
 
     @Test(priority = 13)
     public void T13_TestClickBook() {
-        searchResultsPage.clickSpecificBook();
-        String partialURL = "9781847941831";
-        Assert.assertTrue(productPage.isBookPageDisplayed(partialURL),
-                "The search results page URL does not contain the expected query.");
+        String bookName = "Atomic Habits";  // Dynamic book name
+        String expectedURLPart = bookName.toLowerCase().replace(" ", "-");  // Convert to URL-friendly format
+
+        searchResultsPage.clickSpecificBook(bookName);  // Click the book
+
+        // Get current URL after clicking the book
+        String currentURL = driver.getCurrentUrl();
+
+        // Assert that the URL contains the book name in the expected format
+        Assert.assertTrue(currentURL.contains(expectedURLPart),
+                "The product page URL does not contain the expected book identifier.");
     }
 
 
@@ -157,6 +173,7 @@ public class ShoppingCartTest {
 
     @Test(priority = 22)
     public void T22_TestGoToCartPage() {
+        navBarPage.isCartButtonDisplayed();
         navBarPage.clickCartButton();
         String partialURL = "cart";
         Assert.assertTrue(cartPage.isCartPageDisplayed(partialURL),
@@ -165,7 +182,9 @@ public class ShoppingCartTest {
 
     @Test(priority = 23)
     public void T23_TestBookDisplayed() {
-        Assert.assertTrue(cartPage.isBookAddedToCart());
+        String bookName = "Atomic Habits";  // Example book, can be changed dynamically
+        Assert.assertTrue(cartPage.isBookAddedToCart(bookName),
+                "The book '" + bookName + "' is not displayed in the cart.");
     }
 
     @Test(priority = 24)
@@ -226,6 +245,7 @@ public class ShoppingCartTest {
     @Test(priority = 35)
     public void T35_TestPlusBookQuantity() {
         int expectedQty = 2;
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
         cartPage.clickPlusButton();
         int actualQty = cartPage.getBookQuantity();
         Assert.assertEquals(actualQty, expectedQty);
@@ -241,9 +261,27 @@ public class ShoppingCartTest {
 
     @Test(priority = 37)
     public void T37_TestRemoveButton() {
+        String bookName = "Atomic Habits";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
         cartPage.clickRemoveButton();
-        Assert.assertTrue(cartPage.isCartEmpty());
+        Assert.assertTrue(cartPage.isSuccessMessageDisplayed());
     }
+
+    @Test(priority = 38)
+    public void T38_TestAddAnotherBook() {
+        String bookName = "Funny Story";
+        navBarPage.searchBook(bookName);
+
+        searchResultsPage.clickSpecificBook(bookName);
+
+        productPage.addToCart();
+        Assert.assertTrue(productPage.isNotificationModalDisplayed());
+        productPage.closeNotificationModal();
+
+        navBarPage.clickCartButton();
+        Assert.assertTrue(cartPage.isBookAddedToCart(bookName));
+    }
+
 
     @AfterTest
     public void closeDriver() {

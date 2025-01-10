@@ -13,7 +13,7 @@ public class NavBarPage {
     WebDriver driver;
     WebDriverWait wait;
 
-    public static String bookName = "Atomic Habits";
+//    public static String bookName = "Atomic Habits";
 
     // **Locators for Navbar Elements**
     @FindBy(xpath = "//span[@id='nav-signin-text']")
@@ -27,6 +27,9 @@ public class NavBarPage {
 
     @FindBy(xpath = "//header/div[2]/div[1]/div[1]/div[3]/div[1]/div[2]/a[1]")  // Cart button (icon)
     WebElement cartButton;
+
+    @FindBy(xpath = "//span[@id = 'cart_total_mobile' and @class= 'total-count']")
+    public WebElement cartQuantity;
 
     // **Constructor**
     public NavBarPage(WebDriver driver) {
@@ -74,6 +77,11 @@ public class NavBarPage {
     // 1. Search for a book
     public void searchBook(String bookName) {
         wait.until(ExpectedConditions.visibilityOf(searchBar)).sendKeys(bookName + Keys.ENTER);
+    }
+
+    public int getCartQuantity() {
+        String cartQuantityText = cartQuantity.getAttribute("value");
+        return Integer.parseInt(cartQuantityText);
     }
 
 

@@ -17,8 +17,8 @@ public class SearchResultsPage {
 
     public static String PRELOADER = "preloader";
 
-    @FindBy(xpath = "//a[contains(text(), 'Atomic Habits')]")
-    WebElement specificBook;
+//    @FindBy(xpath = "//a[contains(text(), 'Atomic Habits')]")
+//    WebElement specificBook;
 
     // Constructor
     public SearchResultsPage(WebDriver driver) {
@@ -33,9 +33,25 @@ public class SearchResultsPage {
     }
 
     // Method to click on a specific book
-    public void clickSpecificBook() {
+    public void clickSpecificBook(String bookName) {
+        // Wait until any loader disappears
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
-        WebElement bookElement = wait.until(ExpectedConditions.elementToBeClickable(specificBook));
+
+        // Create dynamic XPath to find the book based on the book name
+        String xpath = "//a[contains(text(), '" + bookName + "')]";
+        WebElement bookElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+
+        // Click the book
         bookElement.click();
+    }
+
+    public WebElement getSpecificBook(String bookName) {
+        String xpath = "//a[contains(text(), '" + bookName + "')]";
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    }
+
+    // Check if the specific book is displayed
+    public boolean isBookDisplayed(String bookName) {
+        return getSpecificBook(bookName).isDisplayed();
     }
 }
