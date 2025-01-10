@@ -17,7 +17,6 @@ import java.time.Duration;
 import static Pages.LoginPage.EMAIL;
 import static Pages.LoginPage.PASSWORD;
 import static Pages.ProductPage.PRELOADER;
-//import static Pages.NavBarPage.bookName;
 
 public class ShoppingCartTest {
     WebDriver driver;
@@ -42,7 +41,7 @@ public class ShoppingCartTest {
     }
 
     @Test(priority = 1)
-    public void T01_TestSignInPageButtonVisible() {
+    public void T01_TestSignInPageButtonDisplayed() {
         Assert.assertTrue(navBarPage.isSignInPageButtonVisible());
     }
 
@@ -89,161 +88,140 @@ public class ShoppingCartTest {
     }
 
     @Test(priority = 10)
-    public void T10_TestSearchButtonDisplayed() {
-        Assert.assertTrue(navBarPage.isSearchButtonDisplayed());
+    public void T12_TestSearchBook() {
+        String bookName = "Atomic Habits";
+        navBarPage.searchBook(bookName);
+
+        String partialURL = "filter_name=" + bookName.replace(" ", "+");
+        Assert.assertTrue(searchResultsPage.isSearchResultsDisplayed(partialURL));
+
+        Assert.assertTrue(searchResultsPage.isBookDisplayed(bookName));
     }
 
     @Test(priority = 11)
-    public void T11_TestSearchButtonClickable() {
-        Assert.assertTrue(navBarPage.isSearchButtonClickable());
+    public void T11_TestClickBook() {
+        String bookName = "Atomic Habits";
+        String expectedURLPart = bookName.toLowerCase().replace(" ", "-");
+
+        searchResultsPage.clickSpecificBook(bookName);
+        Assert.assertTrue(productPage.isBookPageDisplayed(expectedURLPart));
     }
+
 
     @Test(priority = 12)
-    public void T12_TestSearchBook() {
-        String bookName = "Atomic Habits";  // You can change this value for different tests
-        navBarPage.searchBook(bookName);  // Pass dynamic book name in the search method
-
-        // Dynamic URL verification
-        String partialURL = "filter_name=" + bookName.replace(" ", "+");
-        Assert.assertTrue(searchResultsPage.isSearchResultsDisplayed(partialURL),
-                "The search results page URL does not contain the expected query.");
-
-        // Check if the specific book is displayed
-        Assert.assertTrue(searchResultsPage.isBookDisplayed(bookName),
-                "The specific book '" + bookName + "' is not displayed in the search results.");
-    }
-
-    @Test(priority = 13)
-    public void T13_TestClickBook() {
-        String bookName = "Atomic Habits";  // Dynamic book name
-        String expectedURLPart = bookName.toLowerCase().replace(" ", "-");  // Convert to URL-friendly format
-
-        searchResultsPage.clickSpecificBook(bookName);  // Click the book
-
-        // Get current URL after clicking the book
-        String currentURL = driver.getCurrentUrl();
-
-        // Assert that the URL contains the book name in the expected format
-        Assert.assertTrue(currentURL.contains(expectedURLPart),
-                "The product page URL does not contain the expected book identifier.");
-    }
-
-
-    @Test(priority = 14)
-    public void T14_TestPlusQuantityButtonDisplayed() {
+    public void T12_TestPlusQuantityButtonDisplayed() {
         Assert.assertTrue(productPage.isPlusButtonDisplayed());
     }
 
-    @Test(priority = 15)
-    public void T15_TestPlusQuantityButtonClickable() {
+    @Test(priority = 13)
+    public void T13_TestPlusQuantityButtonClickable() {
         Assert.assertTrue(productPage.isPlusButtonClickable());
     }
 
-    @Test(priority = 16)
-    public void T16_TestMinusQuantityButtonDisplayed() {
+    @Test(priority = 14)
+    public void T14_TestMinusQuantityButtonDisplayed() {
         Assert.assertTrue(productPage.isMinusButtonDisplayed());
     }
 
-    @Test(priority = 17)
-    public void T17_TestMinusQuantityButtonClickable() {
+    @Test(priority = 15)
+    public void T15_TestMinusQuantityButtonClickable() {
         Assert.assertTrue(productPage.isMinusButtonClickable());
     }
 
-    @Test(priority = 18)
-    public void T18_TestQuantityDisplayed() {
+    @Test(priority = 16)
+    public void T16_TestQuantityDisplayed() {
         Assert.assertTrue(productPage.isQuantityDisplayed());
     }
 
-    @Test(priority = 19)
-    public void T19_TestAddToCartButtonDisplayed() {
+    @Test(priority = 17)
+    public void T17_TestAddToCartButtonDisplayed() {
         Assert.assertTrue(productPage.isAddToCartButtonDisplayed());
     }
 
-    @Test(priority = 20)
-    public void T20_TestAddToCartButtonClickable() {
+    @Test(priority = 18)
+    public void T18_TestAddToCartButtonClickable() {
         Assert.assertTrue(productPage.isAddToCartButtonClickable());
     }
 
-    @Test(priority = 21)
-    public void T21_TestAddToCart() {
+    @Test(priority = 19)
+    public void T19_TestAddToCart() {
         productPage.addToCart();
         Assert.assertTrue(productPage.isNotificationModalDisplayed());
         productPage.closeNotificationModal();
     }
 
-    @Test(priority = 22)
-    public void T22_TestGoToCartPage() {
+    @Test(priority = 20)
+    public void T20_TestGoToCartPage() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class = 'modal-backdrop fade']")));
         navBarPage.isCartButtonDisplayed();
         navBarPage.clickCartButton();
         String partialURL = "cart";
-        Assert.assertTrue(cartPage.isCartPageDisplayed(partialURL),
-                "The search results page URL does not contain the expected query.");
+        Assert.assertTrue(cartPage.isCartPageDisplayed(partialURL));
     }
 
-    @Test(priority = 23)
-    public void T23_TestBookDisplayed() {
-        String bookName = "Atomic Habits";  // Example book, can be changed dynamically
-        Assert.assertTrue(cartPage.isBookAddedToCart(bookName),
-                "The book '" + bookName + "' is not displayed in the cart.");
+    @Test(priority = 21)
+    public void T21_TestBookDisplayed() {
+        String bookName = "Atomic Habits";
+        Assert.assertTrue(cartPage.isBookAddedToCart(bookName));
     }
 
-    @Test(priority = 24)
-    public void T24_TestPlusButtonDisplayed() {
+    @Test(priority = 22)
+    public void T22_TestPlusButtonDisplayed() {
         Assert.assertTrue(cartPage.isPlusButtonDisplayed());
     }
 
-    @Test(priority = 25)
-    public void T25_TestPlusButtonClickable() {
+    @Test(priority = 23)
+    public void T23_TestPlusButtonClickable() {
         Assert.assertTrue(cartPage.isPlusButtonClickable());
     }
 
-    @Test(priority = 26)
-    public void T26_TestMinusButtonDisplayed() {
+    @Test(priority = 24)
+    public void T24_TestMinusButtonDisplayed() {
         Assert.assertTrue(cartPage.isMinusButtonDisplayed());
     }
 
-    @Test(priority = 27)
-    public void T27_TestMinusButtonClickable() {
+    @Test(priority = 25)
+    public void T25_TestMinusButtonClickable() {
         Assert.assertTrue(cartPage.isMinusButtonClickable());
     }
 
-    @Test(priority = 28)
-    public void T28_TestRemoveButtonDisplayed() {
+    @Test(priority = 26)
+    public void T26_TestRemoveButtonDisplayed() {
         Assert.assertTrue(cartPage.isRemoveButtonDisplayed());
     }
 
-    @Test(priority = 29)
-    public void T29_TestRemoveButtonClickable() {
+    @Test(priority = 27)
+    public void T27_TestRemoveButtonClickable() {
         Assert.assertTrue(cartPage.isRemoveButtonClickable());
     }
 
-    @Test(priority = 30)
-    public void T30_TestSaveButtonDisplayed() {
+    @Test(priority = 28)
+    public void T28_TestSaveButtonDisplayed() {
         Assert.assertTrue(cartPage.isSaveButtonDisplayed());
     }
 
-    @Test(priority = 31)
-    public void T31_TestSaveButtonClickable() {
+    @Test(priority = 29)
+    public void T29_TestSaveButtonClickable() {
         Assert.assertTrue(cartPage.isSaveButtonClickable());
     }
 
-    @Test(priority = 32)
-    public void T32_TestCheckoutButtonDisplayed() {
+    @Test(priority = 30)
+    public void T30_TestCheckoutButtonDisplayed() {
         Assert.assertTrue(cartPage.isCheckoutButtonDisplayed());
     }
 
-    @Test(priority = 33)
-    public void T33_TestCheckoutButtonClickable() {
+    @Test(priority = 31)
+    public void T31_TestCheckoutButtonClickable() {
         Assert.assertTrue(cartPage.isCheckoutButtonClickable());
     }
 
-    @Test(priority = 34)
-    public void T34_TestCartPriceDisplayed() {
+    @Test(priority = 32)
+    public void T32_TestCartPriceDisplayed() {
         Assert.assertTrue(cartPage.isCartPriceDisplayed());
     }
 
-    @Test(priority = 35)
-    public void T35_TestPlusBookQuantity() {
+    @Test(priority = 33)
+    public void T33_TestPlusBookQuantity() {
         int expectedQty = 2;
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
         cartPage.clickPlusButton();
@@ -251,24 +229,16 @@ public class ShoppingCartTest {
         Assert.assertEquals(actualQty, expectedQty);
     }
 
-    @Test(priority = 36)
-    public void T36_TestMinusBookQuantity() {
+    @Test(priority = 34)
+    public void T34_TestMinusBookQuantity() {
         int expectedQty = 1;
         cartPage.clickMinusButton();
         int actualQty = cartPage.getBookQuantity();
-        Assert.assertEquals(actualQty, expectedQty, "The book quantity after decrement is incorrect.");
+        Assert.assertEquals(actualQty, expectedQty);
     }
 
-    @Test(priority = 37)
-    public void T37_TestRemoveButton() {
-        String bookName = "Atomic Habits";
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
-        cartPage.clickRemoveButton();
-        Assert.assertTrue(cartPage.isSuccessMessageDisplayed());
-    }
-
-    @Test(priority = 38)
-    public void T38_TestAddAnotherBook() {
+    @Test(priority = 35)
+    public void T36_TestAddAnotherBook() {
         String bookName = "Funny Story";
         navBarPage.searchBook(bookName);
 
@@ -282,6 +252,20 @@ public class ShoppingCartTest {
         Assert.assertTrue(cartPage.isBookAddedToCart(bookName));
     }
 
+    @Test(priority = 36)
+    public void T35_TestRemoveButton() {
+        String bookName = "Atomic Habits";
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
+        cartPage.clickRemoveButton();
+        Assert.assertTrue(cartPage.isSuccessMessageDisplayed());
+    }
+
+    @Test(priority = 37)
+    public void T37_TestSaveButton(){
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(PRELOADER)));
+        cartPage.clickSaveButton();
+        Assert.assertTrue(cartPage.isEmptyCartMessageDisplayed());
+    }
 
     @AfterTest
     public void closeDriver() {

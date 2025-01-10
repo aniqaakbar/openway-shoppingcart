@@ -13,12 +13,11 @@ import java.time.Duration;
 public class ProductPage {
     WebDriver driver;
     WebDriverWait wait;
-    NavBarPage navBarPage;
 
     public static String PRELOADER = "preloader";
 
     @FindBy(xpath = "//button[contains(text(),'Add to Cart')]")
-    WebElement addToCartButton;  // "Add to Cart" button
+    WebElement addToCartButton;
 
     @FindBy(xpath = "//input[@id= 'qty_54384253']")
     WebElement specificBookQuantity;
@@ -29,7 +28,7 @@ public class ProductPage {
     @FindBy(xpath = "//button[@data-field= 'qty_54384253' and @data-type='minus']")
     WebElement minusQuantityButton;
 
-    @FindBy(xpath = "//div[contains(text(),'Success add to cart')]")
+    @FindBy(xpath = "//div[contains(text(),'Success add to cart') and @class='modal-text']")
     WebElement notificationModal;
 
     @FindBy(xpath = "//button[@aria-label= 'close']")
@@ -44,24 +43,6 @@ public class ProductPage {
     public boolean isBookPageDisplayed(String expectedURL) {
         String currentURL = driver.getCurrentUrl();
         return currentURL.contains(expectedURL);
-    }
-
-    //Actions
-    public boolean isAddToCartButtonDisplayed() {
-        return addToCartButton.isDisplayed();
-    }
-
-    public boolean isAddToCartButtonClickable() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isQuantityDisplayed() {
-        return specificBookQuantity.isDisplayed();
     }
 
     public boolean isPlusButtonDisplayed() {
@@ -90,8 +71,21 @@ public class ProductPage {
         }
     }
 
-    public boolean isNotificationModalDisplayed() {
-        return wait.until(ExpectedConditions.visibilityOf(notificationModal)).isDisplayed();
+    public boolean isQuantityDisplayed() {
+        return specificBookQuantity.isDisplayed();
+    }
+
+    public boolean isAddToCartButtonDisplayed() {
+        return addToCartButton.isDisplayed();
+    }
+
+    public boolean isAddToCartButtonClickable() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void addToCart() {
@@ -99,25 +93,11 @@ public class ProductPage {
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
     }
 
+    public boolean isNotificationModalDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(notificationModal)).isDisplayed();
+    }
+
     public void closeNotificationModal() {
         wait.until(ExpectedConditions.elementToBeClickable(notificationModalButton)).click();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

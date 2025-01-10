@@ -45,8 +45,9 @@ public class CartPage {
     @FindBy(xpath = "//div[@class = 'success' and contains(text(), 'Success: You have modified your shopping cart')]")
     WebElement successMessage;
 
+    @FindBy(xpath = "//div[@class = 'content' and contains(text(), 'Your shopping cart is empty')]")
+    WebElement emptyCartMessage;
 
-    // Constructor
     public CartPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -54,12 +55,23 @@ public class CartPage {
         PageFactory.initElements(driver, this);
     }
 
-    public boolean isCartEmpty() {
-        return wait.until(ExpectedConditions.visibilityOf(emptyCartText)).isDisplayed();
+    public int getBookQuantity() {
+        String quantityText = bookQuantity.getAttribute("value");
+        return Integer.parseInt(quantityText);
     }
 
-    public boolean isSuccessMessageDisplayed(){
-        return wait.until(ExpectedConditions.visibilityOf(successMessage)).isDisplayed();
+    public boolean isBookAddedToCart(String bookName) {
+        String xpath = "//a[contains(text(), '" + bookName + "')]";  // Dynamic XPath for book name
+        try {
+            WebElement bookElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+            return bookElement.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isCartPriceDisplayed() {
+        return cartPrice.isDisplayed();
     }
 
     public boolean isPlusButtonDisplayed() {
@@ -96,31 +108,6 @@ public class CartPage {
         wait.until(ExpectedConditions.elementToBeClickable(minusButton)).click();
     }
 
-    public int getBookQuantity() {
-        String quantityText = bookQuantity.getAttribute("value");
-        return Integer.parseInt(quantityText);
-    }
-
-    public boolean isCartPageDisplayed(String partialURL) {
-        String currentURL = driver.getCurrentUrl();
-        return currentURL.contains(partialURL);
-    }
-
-    public boolean isBookAddedToCart(String bookName) {
-        String xpath = "//a[contains(text(), '" + bookName + "')]";  // Dynamic XPath for book name
-        try {
-            WebElement bookElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-            return bookElement.isDisplayed();  // Return true if displayed
-        } catch (Exception e) {
-            return false;  // Return false if not found
-        }
-    }
-
-
-    public boolean isCartPriceDisplayed() {
-        return cartPrice.isDisplayed();
-    }
-
     public boolean isRemoveButtonDisplayed() {
         return removeButton.isDisplayed();
     }
@@ -133,7 +120,6 @@ public class CartPage {
             return false;
         }
     }
-
 
     public void clickRemoveButton() {
         wait.until(ExpectedConditions.elementToBeClickable(removeButton)).click();
@@ -152,6 +138,10 @@ public class CartPage {
         }
     }
 
+    public void clickSaveButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(saveButton)).click();
+    }
+
     public boolean isCheckoutButtonDisplayed() {
         return checkoutButton.isDisplayed();
     }
@@ -165,7 +155,16 @@ public class CartPage {
         }
     }
 
-    public void clickCheckoutButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
+    public boolean isCartPageDisplayed(String partialURL) {
+        String currentURL = driver.getCurrentUrl();
+        return currentURL.contains(partialURL);
+    }
+
+    public boolean isSuccessMessageDisplayed(){
+        return wait.until(ExpectedConditions.visibilityOf(successMessage)).isDisplayed();
+    }
+
+    public boolean isEmptyCartMessageDisplayed(){
+        return emptyCartMessage.isDisplayed();
     }
 }

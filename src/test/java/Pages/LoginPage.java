@@ -16,11 +16,6 @@ public class LoginPage {
     public static String EMAIL = "aniqa.akbar@gmail.com";
     public static String PASSWORD = "P3r1plu5";
 
-    /*Locators*/
-
-    @FindBy(className = "login-content")
-    WebElement loginPageContent;
-
     @FindBy(xpath = "//span[contains(text(),'Sign In to Your Account')]")
     WebElement pageTitle;
 
@@ -36,39 +31,11 @@ public class LoginPage {
     @FindBy(xpath = "//a[contains(text(),'Account Details')]")
     WebElement accountDetailsPage;
 
-    /*Constructor*/
     public LoginPage(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver,this);
     }
-
-    /*Actions*/
-
-
-    //Enter Email
-    public void enterEmail(String EMAIL) {
-        wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(EMAIL);
-    }
-
-    // Enter Password
-    public void enterPassword(String PASSWORD) {
-        wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(PASSWORD);
-    }
-
-    //Click Login Button
-    public void clickLoginButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-    }
-
-    //Signing In
-    public void signIn(String EMAIL, String PASSWORD){
-        enterEmail(EMAIL);
-        enterPassword(PASSWORD);
-        clickLoginButton();
-    }
-
-    //Validations
 
     public boolean isLoginPageDisplayed(){
         return wait.until(ExpectedConditions.visibilityOf(pageTitle)).isDisplayed();
@@ -95,17 +62,25 @@ public class LoginPage {
         }
     }
 
+    public void enterEmail(String EMAIL) {
+        wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(EMAIL);
+    }
+
+    public void enterPassword(String PASSWORD) {
+        wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(PASSWORD);
+    }
+
+    public void clickLoginButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+    }
+
+    public void signIn(String EMAIL, String PASSWORD){
+        enterEmail(EMAIL);
+        enterPassword(PASSWORD);
+        clickLoginButton();
+    }
+
     public boolean isAccountPageDisplayed(){
         return wait.until(ExpectedConditions.visibilityOf(accountDetailsPage)).isDisplayed();
     }
-
-
-
-
-
-
-
-
-
-
 }
